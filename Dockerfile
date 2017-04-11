@@ -4,21 +4,20 @@ LABEL maintainer="github@lplab.net" \
       version="0.0.1b" \
       description="Unifi Controller Docker container"
 
-ENV TINI_VERSION v0.14.0
-
 RUN apt-get update && \
     apt-get -y dist-upgrade && \
     apt-get -y install wget procps manpages && \
     apt-get clean
-
-ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /tini
-RUN chmod +x /tini
 
 RUN wget -nv -O /unifi_sysvinit_all.deb https://www.ubnt.com/downloads/unifi/5.6.2-224554000b/unifi_sysvinit_all.deb && \
     dpkg -i --force-all /unifi_sysvinit_all.deb && \
     apt-get -f -y install && \
     rm -f /unifi_sysvinit_all.deb && \
     apt-get clean
+
+ENV TINI_VERSION v0.14.0
+ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /tini
+RUN chmod +x /tini
 
 ADD unifi /etc/init.d/unifi
 RUN chmod +x /etc/init.d/unifi
