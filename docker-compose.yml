@@ -3,7 +3,7 @@ version: '2'
 services:
 
   unifi:
-    image: lplab/dockerunifi:latest
+    image: lplab/dockerunificontroller:latest
     restart: unless-stopped
     build:
       context: .
