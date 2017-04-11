@@ -1,0 +1,26 @@
+version: '2'
+
+services:
+
+  unifi:
+    image: lplab/dockerunifi:latest
+    restart: unless-stopped
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 80:8080
+      - 8443:8443
+    volumes:
+      - unifi-db:/var/lib/unifi
+      - /etc/localtime:/etc/localtime:ro
+      - unifi-log:/var/log/unifi
+      - unifi-run:/var/run/unifi
+
+volumes:
+  unifi-db:
+    driver: local
+  unifi-log:
+    driver: local
+  unifi-run:
+    driver: local

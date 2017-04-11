@@ -1,0 +1,47 @@
+FROM debian:sid
+
+LABEL maintainer="github@lplab.net" \
+      version="0.0.1b" \
+      description="Unifi Controller Docker container"
+
+ENV TINI_VERSION v0.14.0
+
+RUN apt-get update && \
+    apt-get -y dist-upgrade && \
+    apt-get -y install wget procps manpages && \
+    apt-get clean
+
+ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /tini
+RUN chmod +x /tini
+
+RUN wget -nv -O /unifi_sysvinit_all.deb https://www.ubnt.com/downloads/unifi/5.6.2-224554000b/unifi_sysvinit_all.deb && \
+    dpkg -i --force-all /unifi_sysvinit_all.deb && \
+    apt-get -f -y install && \
+    rm -f /unifi_sysvinit_all.deb && \
+    apt-get clean
+
+ADD unifi /etc/init.d/unifi
+RUN chmod +x /etc/init.d/unifi
+
+ADD entrypoint.sh /sbin/entrypoint.sh
+RUN chmod +x /sbin/entrypoint.sh
+
+ENV BASEDIR=/usr/lib/unifi \
+  DATADIR=/var/lib/unifi \
+  RUNDIR=/var/run/unifi \
+  LOGDIR=/var/log/unifi \
+  JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64 \
+  JVM_MAX_HEAP_SIZE=1024M \
+  JVM_INIT_HEAP_SIZE=
+
+RUN ln -s ${BASEDIR}/data ${DATADIR} && \
+  ln -s ${BASEDIR}/run ${RUNDIR} && \
+  ln -s ${BASEDIR}/logs ${LOGDIR} && \
+  ln -s /usr/bin/mongod /usr/lib/unifi/bin/
+
+VOLUME ["${DATADIR}", "${RUNDIR}", "${LOGDIR}"]
+
+EXPOSE 6789/tcp 8080/tcp 8443/tcp 8880/tcp 8843/tcp 3478/udp
+ENTRYPOINT ["/tini", "--"]
+
+CMD ["/sbin/entrypoint.sh"]
