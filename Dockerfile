@@ -9,7 +9,7 @@ RUN apt-get update && \
     apt-get -y install wget procps manpages && \
     apt-get clean
 
-RUN wget -nv -O /unifi_sysvinit_all.deb https://www.ubnt.com/downloads/unifi/5.6.2-224554000b/unifi_sysvinit_all.deb && \
+RUN wget -nv -O /unifi_sysvinit_all.deb https://www.ubnt.com/downloads/unifi/5.6.3-bed25ecf6c/unifi_sysvinit_all.deb && \
     dpkg -i --force-all /unifi_sysvinit_all.deb && \
     apt-get -f -y install && \
     rm -f /unifi_sysvinit_all.deb && \
