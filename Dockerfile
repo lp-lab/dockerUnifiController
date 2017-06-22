@@ -1,7 +1,7 @@
 FROM debian:sid
 
 LABEL maintainer="github@lplab.net" \
-      version="0.0.1b" \
+      version="0.0.2b" \
       description="Unifi Controller Docker container"
 
 RUN apt-get update && \
@@ -9,7 +9,7 @@ RUN apt-get update && \
     apt-get -y install wget procps manpages && \
     apt-get clean
 
-RUN wget -nv -O /unifi_sysvinit_all.deb https://www.ubnt.com/downloads/unifi/5.6.3-bed25ecf6c/unifi_sysvinit_all.deb && \
+RUN wget -nv -O /unifi_sysvinit_all.deb https://www.ubnt.com/downloads/unifi/5.6.7-63ab9a7965/unifi_sysvinit_all.deb && \
     dpkg -i --force-all /unifi_sysvinit_all.deb && \
     apt-get -f -y install && \
     rm -f /unifi_sysvinit_all.deb && \
