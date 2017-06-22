@@ -40,7 +40,7 @@ RUN ln -s ${BASEDIR}/data ${DATADIR} && \
 
 VOLUME ["${DATADIR}", "${RUNDIR}", "${LOGDIR}"]
 
-EXPOSE 6789/tcp 8080/tcp 8443/tcp 8880/tcp 8843/tcp 3478/udp
+EXPOSE 6789/tcp 8080/tcp 8443/tcp 8880/tcp 8843/tcp 3478/udp 3478/tcp
 ENTRYPOINT ["/tini", "--"]
 
 CMD ["/sbin/entrypoint.sh"]
