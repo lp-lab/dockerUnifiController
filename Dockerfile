@@ -1,12 +1,12 @@
 FROM debian:sid
 
 LABEL maintainer="github@lplab.net" \
-      version="0.0.2b" \
+      version="dev" \
       description="Unifi Controller Docker container"
 
 RUN apt-get update && \
     apt-get -y dist-upgrade && \
-    apt-get -y install gnupg && \
+    apt-get -y install wget gnupg && \
     apt-get clean
 
 RUN wget -nv -O /unifi_sysvinit_all.deb https://www.ubnt.com/downloads/unifi/5.6.14-f7a900184a/unifi_sysvinit_all.deb && \
