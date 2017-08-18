@@ -9,15 +9,18 @@ RUN apt-get update && \
     apt-get -y install wget procps manpages && \
     apt-get clean
 
-RUN wget -nv -O /unifi_sysvinit_all.deb https://www.ubnt.com/downloads/unifi/5.6.7-63ab9a7965/unifi_sysvinit_all.deb && \
+RUN wget -nv -O /unifi_sysvinit_all.deb https://www.ubnt.com/downloads/unifi/5.6.14-f7a900184a/unifi_sysvinit_all.deb && \
     dpkg -i --force-all /unifi_sysvinit_all.deb && \
     apt-get -f -y install && \
     rm -f /unifi_sysvinit_all.deb && \
     apt-get clean
 
-ENV TINI_VERSION v0.14.0
-ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /tini
-RUN chmod +x /tini
+    ENV TINI_VERSION v0.15.0
+    ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /tini
+    ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini.asc /tini.asc
+    RUN gpg --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 595E85A6B1B4779EA4DAAEC70B588DFF0527A9B7 \
+     && gpg --verify /tini.asc
+    RUN chmod +x /tini
 
 ADD unifi /etc/init.d/unifi
 RUN chmod +x /etc/init.d/unifi
